@@ -10,6 +10,7 @@ import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
+import com.Skully250.graphics.Screen;
 import com.Skully250.input.Keyboard;
 
 public class MainGame extends Canvas implements Runnable {
