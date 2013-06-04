@@ -12,6 +12,8 @@ import javax.swing.JFrame;
 
 import com.Skully250.graphics.Screen;
 import com.Skully250.input.Keyboard;
+import com.Skully250.level.Level;
+import com.Skully250.level.RandomLevel;
 
 public class MainGame extends Canvas implements Runnable {
 
@@ -23,6 +25,7 @@ public class MainGame extends Canvas implements Runnable {
 
 	private Thread gameThread;
 	private JFrame frame;
+	private Level level;
 	private Keyboard key;
 	private boolean running = false;
 	
@@ -38,6 +41,7 @@ public class MainGame extends Canvas implements Runnable {
 		screen = new Screen(width, height);
 		frame = new JFrame();
 		key = new Keyboard();
+		level = new RandomLevel(64, 64);
 		
 		addKeyListener(key);
 	}
@@ -64,6 +68,7 @@ public class MainGame extends Canvas implements Runnable {
 		double delta = 0;
 		int frames = 0;
 		int ticks = 0;
+		requestFocus();
 		while (running) {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
@@ -89,10 +94,10 @@ public class MainGame extends Canvas implements Runnable {
 	int x = 0, y = 0;
 	public void tick() {
 		key.update();
-		if (key.up) y--;
-		if (key.down) y++;
-		if (key.left) x--;
-		if (key.right) x++;
+		if (key.up) y++;
+		if (key.down) y--;
+		if (key.left) x++;
+		if (key.right) x--;
 	}
 	
 	public void render() {
@@ -102,7 +107,7 @@ public class MainGame extends Canvas implements Runnable {
 			return;
 		}
 		screen.clear();
-		screen.render(x, y);
+		level.render(x, y, screen);
 		
 		for (int i = 0; i < pixels.length; i++) {
 			pixels[i] = screen.pixels[i];

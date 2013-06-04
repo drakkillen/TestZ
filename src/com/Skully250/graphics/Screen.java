@@ -2,14 +2,18 @@ package com.Skully250.graphics;
 
 import java.util.Random;
 
+import com.Skully250.tile.Tile;
+
 
 public class Screen {
 
-	private int width, height;
+	public int width, height;
 	public int[] pixels;
-	public final int MAP_SIZE = 16;
+	public final int MAP_SIZE = 64;
 	public final int MAP_SIZE_MASK = MAP_SIZE - 1;
-	
+
+	public int xOffset, yOffset;
+
 	public int[] tiles = new int[MAP_SIZE * MAP_SIZE];
 
 	private Random random = new Random();
@@ -31,15 +35,22 @@ public class Screen {
 		}
 	}
 
-	public void render(int xOffset, int yOffset) {
-		for (int y = 0; y < height; y++) {
-			int yy = y + yOffset;
-			//if (y < 0 || y >= height) break;
-			for (int x = 0; x < width; x++) {
-				int xx = x + xOffset;
-				//if (xx < 0 || xx >= width) break;
-				pixels[x + y * width] = Sprite.ground.pixels[(x & 15) + (y & 15) * Sprite.ground.SIZE];
+	public void renderTile(int xp, int yp, Tile tile) {
+		xp -= xOffset;
+		yp -= yOffset;
+		for (int y = 0; y < tile.sprite.SIZE; y++) {
+			int ya = y + yp;
+			for (int x = 0; x < tile.sprite.SIZE; x++) {
+				int xa = x + xp;
+				if (xa < 0 || xa >= width || ya < 0 || ya >= width) break;
+				pixels[xa + ya * width] = tile.sprite.pixels[x + y * tile.sprite.SIZE];
 			}
 		}
 	}
+
+	public void setOffset(int xOffset, int yOffset) {
+		this.xOffset = xOffset;
+		this.yOffset = yOffset;
+	}
+
 }
